@@ -1,0 +1,89 @@
+# 1) Imprimir números del 0 al 100
+print("1) Números del 0 al 100:")
+for i in range(101):
+    print(i)
+print("----------")
+
+# 2) Contar dígitos de un número
+num = int(input("2) Ingresa un número entero para contar sus dígitos: "))
+cantidad_digitos = len(str(abs(num)))
+print("Cantidad de dígitos:", cantidad_digitos)
+print("----------")
+
+# 3) Sumar números entre dos valores (excluyendo los extremos)
+a = int(input("3) Ingresa el primer número: "))
+b = int(input("Ingresa el segundo número: "))
+suma = 0
+for i in range(min(a, b) + 1, max(a, b)):
+    suma += i
+print("Suma de números entre", a, "y", b, ":", suma)
+print("----------")
+
+# 4) Sumar números hasta que el usuario ingrese 0
+total = 0
+while True:
+    n = int(input("4) Ingresa un número (0 para detener): "))
+    if n == 0:
+        break
+    total += n
+print("Total acumulado:", total)
+print("----------")
+
+# 5) Juego de adivinar un número
+import random
+numero_secreto = random.randint(0, 9)
+intentos = 0
+while True:
+    intento = int(input("5) Adivina el número entre 0 y 9: "))
+    intentos += 1
+    if intento == numero_secreto:
+        print("¡Correcto! Número de intentos:", intentos)
+        break
+print("----------")
+
+# 6) Imprimir números pares entre 0 y 100 en orden decreciente
+print("6) Números pares del 100 al 0:")
+for i in range(100, -1, -1):
+    if i % 2 == 0:
+        print(i)
+print("----------")
+
+# 7) Sumar números desde 0 hasta un número dado por el usuario
+limite = int(input("7) Ingresa un número positivo: "))
+suma = 0
+for i in range(limite + 1):
+    suma += i
+print("Suma de 0 a", limite, ":", suma)
+print("----------")
+
+# 8) Contar pares, impares, positivos y negativos en 100 números
+pares = impares = positivos = negativos = 0
+for i in range(100):
+    n = int(input(f"8) Ingresa el número {i+1}: "))
+    if n % 2 == 0:
+        pares += 1
+    else:
+        impares += 1
+    if n > 0:
+        positivos += 1
+    elif n < 0:
+        negativos += 1
+print("Pares:", pares)
+print("Impares:", impares)
+print("Positivos:", positivos)
+print("Negativos:", negativos)
+print("----------")
+
+# 9) Calcular la media de 100 números
+suma_total = 0
+for i in range(100):
+    n = int(input(f"9) Ingresa el número {i+1}: "))
+    suma_total += n
+media = suma_total / 100
+print("Media de los números:", media)
+print("----------")
+
+# 10) Invertir dígitos de un número
+num = int(input("10) Ingresa un número para invertir sus dígitos: "))
+num_invertido = str(num)[::-1]
+print("Número invertido:", num_invertido)
