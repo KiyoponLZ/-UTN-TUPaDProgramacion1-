@@ -1,0 +1,87 @@
+# gestionNotas.py
+
+# 1 - Diccionario de alumnos (Legajo : Nombre completo)
+alumnos = {
+    60902: "Rodolfo Fernandez",
+    61654: "Luis Gomez",
+    61852: "Andrea Pereira",
+    61754: "Juan Cruz Gonzales"
+}
+
+# 2 - Lista de materias (estructura: Materia, Nota1, Nota2, NotaFinal)
+materias_base = [
+    ["Ciencias", 0, 0, 0],
+    ["Historia", 0, 0, 0],
+    ["Geografia", 0, 0, 0],
+    ["Matematicas", 0, 0, 0],
+    ["Fisica", 0, 0, 0]
+]
+
+# 3 - Lista de notas finales de alumnos
+notasFinales = []  # [ [nombre, promedio_general], ... ]
+
+
+# Función para pedir notas y validar entre 0 y 10
+def pedir_nota(materia, numero):
+    while True:
+        try:
+            nota = float(input(f"Ingrese Nota {numero} para {materia}: "))
+            if 0 <= nota <= 10:
+                return nota
+            else:
+                print("⚠️ Error: la nota debe estar entre 0 y 10.")
+        except ValueError:
+            print("⚠️ Error: ingrese un número válido.")
+
+
+# Programa principal
+for legajo, nombre in alumnos.items():
+    print("\n===================================")
+    print(f"Alumno: {nombre} (Legajo: {legajo})")
+    print("===================================")
+
+    # Copio la lista base de materias para este alumno
+    materias = [fila[:] for fila in materias_base]
+
+    # Pido las notas de cada materia
+    for fila in materias:
+        materia = fila[0]
+        print(f"\nMateria: {materia}")
+
+        nota1 = pedir_nota(materia, 1)
+        nota2 = pedir_nota(materia, 2)
+
+        # Calculo promedio
+        notaFinal = (nota1 + nota2) / 2
+
+        # Guardo en la lista
+        fila[1] = nota1
+        fila[2] = nota2
+        fila[3] = round(notaFinal, 2)
+
+    # Mostrar todas las materias con notas
+    print("\n📘 Notas cargadas:")
+    for fila in materias:
+        print(f"{fila[0]} - Nota1: {fila[1]} | Nota2: {fila[2]} | Final: {fila[3]}")
+
+    # Determinar materia con mejor calificación
+    mejor_materia = max(materias, key=lambda x: x[3])
+    print(f"\n✅ La mejor materia de {nombre} fue {mejor_materia[0]} con {mejor_materia[3]}")
+
+    # Calcular promedio general
+    promedio_general = sum(fila[3] for fila in materias) / len(materias)
+    promedio_general = round(promedio_general, 2)
+
+    # Guardar en notasFinales
+    notasFinales.append([nombre, promedio_general])
+
+    print(f"🎓 Promedio general de {nombre}: {promedio_general}")
+
+# Al finalizar todos los alumnos, ver quién tuvo el mejor promedio
+print("\n===================================")
+print("📊 Promedios finales de todos los alumnos:")
+for fila in notasFinales:
+    print(f"{fila[0]} - Promedio General: {fila[1]}")
+
+mejor_alumno = max(notasFinales, key=lambda x: x[1])
+print("\n🏆 El alumno con mejor promedio es:", mejor_alumno[0], "con", mejor_alumno[1])
