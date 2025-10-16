@@ -1,0 +1,187 @@
+
+def leer_alumnos():
+    
+    alumnos = []       # Lista con todos los alumnos   (creo q ni hacia falta q explique esto pero por las dudas)
+    diccionario = {}   # Diccionario con clave = legajo
+
+    try:
+        # Abrimos el archivo para leer (r = read)
+        with open("alumnos.txt", "r", encoding="utf-8") as f:
+            for linea in f:
+                linea = linea.strip()   # Saca espacios y saltos de línea
+                if linea != "":
+                    partes = linea.split(";")  # Separa los datos con ";"
+                    if len(partes) == 4:
+                        nombre, apellido, legajo, nota = partes
+                        alumno = {
+                            "nombre": nombre,
+                            "apellido": apellido,
+                            "legajo": legajo,
+                            "nota": float(nota)
+                        }
+                        alumnos.append(alumno)           # Agrega a la lista
+                        diccionario[legajo] = alumno     # Agrega al diccionario
+    except FileNotFoundError:
+        
+        with open("alumnos.txt", "w", encoding="utf-8") as f:
+            pass
+    except Exception as e:
+        print("Error al leer el archivo:", e)
+
+    return alumnos, diccionario
+
+
+def validar_letras(texto):
+    """Revisa que solo haya letras"""
+    for c in texto:
+        if not c.isalpha():  # Si hay algo que no sea letra, da False(buena funcion para aprenderse de los strings hay 2 mas)
+            return False
+    return True
+
+
+def validar_legajo(legajo):
+    
+    if len(legajo) == 5 and legajo.isdigit():
+        return True
+    return False
+
+
+def validar_nota(nota):
+    
+    try:
+        n = float(nota)
+        if n >= 1 and n <= 10:
+            return True
+        else:
+            return False
+    except:
+        return False
+
+
+def validar_existe_alumno(diccionario, legajo):
+    """Revisa si ya existe ese legajo en el diccionario"""
+    return legajo in diccionario
+
+
+
+
+def agregar_alumno(alumnos, diccionario):
+    print("\n--- Agregar nuevo alumno ---")
+
+   
+    nombre = input("Ingrese nombre: ").strip()
+    while not validar_letras(nombre):
+        print("❌ El nombre solo puede contener letras.") #(mas fachero con emotes mas visaul)
+        nombre = input("Ingrese nombre: ").strip()
+
+    # Pide el apellido y valida
+    apellido = input("Ingrese apellido: ").strip()
+    while not validar_letras(apellido):
+        print("❌ El apellido solo puede contener letras.")
+        apellido = input("Ingrese apellido: ").strip()
+
+    # Pide el legajo y valida
+    legajo = input("Ingrese legajo (5 dígitos): ").strip()
+    while not validar_legajo(legajo):
+        print("❌ El legajo debe tener 5 dígitos.")
+        legajo = input("Ingrese legajo (5 dígitos): ").strip()
+
+    # Revisa si ya existe
+    if validar_existe_alumno(diccionario, legajo):
+        print(f"⚠️ El legajo {legajo} ya existe en el archivo alumnos.txt, no se permite su escritura.")
+        return
+
+    # Pide la nota y valida
+    nota = input("Ingrese nota promedio (1 a 10): ").strip()
+    while not validar_nota(nota):
+        print("❌ La nota debe ser un número entre 1 y 10.")
+        nota = input("Ingrese nota promedio (1 a 10): ").strip()
+
+    # Crea el alumno con los datos ingresados
+    alumno = {
+        "nombre": nombre,
+        "apellido": apellido,
+        "legajo": legajo,
+        "nota": float(nota)
+    }
+
+    # Lo guardo en la lista y el diccionario
+    alumnos.append(alumno)
+    diccionario[legajo] = alumno
+
+    # Escribo en el archivo
+    try:
+        with open("alumnos.txt", "a", encoding="utf-8") as f:
+            f.write(f"{nombre};{apellido};{legajo};{nota}\n")
+        print("✅ Alumno agregado correctamente.")
+    except Exception as e:
+        print("Error al escribir en el archivo:", e)
+
+
+
+
+def mostrar_alumnos(alumnos):
+    """Muestra todos los alumnos en pantalla"""
+    if len(alumnos) == 0:
+        print("No hay alumnos cargados.")
+    else:
+        print("\n--- Lista de Alumnos ---")
+        for a in alumnos:
+            print(f"{a['nombre']} {a['apellido']} - Legajo: {a['legajo']} - Nota promedio: {a['nota']}")
+
+
+
+
+def guardar_aprobados(alumnos):
+    """Crea un archivo con los alumnos con nota >= 6"""
+    try:
+        with open("aprobados.txt", "w", encoding="utf-8") as f:
+            for a in alumnos:
+                if a["nota"] >= 6:
+                    f.write(f"{a['nombre']};{a['apellido']};{a['legajo']};{a['nota']}\n")
+
+        print("\n--- Alumnos Aprobados ---")
+        with open("aprobados.txt", "r", encoding="utf-8") as f:
+            contenido = f.read()
+            if contenido.strip() == "":
+                print("No hay aprobados.")
+            else:
+                print(contenido)
+    except Exception as e:
+        print("Error al generar aprobados.txt:", e)
+
+
+# -----------------------------
+# FUNCIÓN PRINCIPAL (MENÚ) 
+# -----------------------------
+
+def menu():
+    # Carga los alumnos desde el archivo al iniciar
+    alumnos, diccionario = leer_alumnos()
+
+    
+    while True:
+        print("\n===== MENÚ PRINCIPAL =====")
+        print("1. Ver alumnos")
+        print("2. Agregar alumno")
+        print("3. Generar y mostrar aprobados")
+        print("4. Salir")
+
+        opcion = input("Ingrese una opción: ").strip()
+
+        # Segun la opcion q eligamos va a llamar las funciones q hicimos
+        if opcion == "1":
+            mostrar_alumnos(alumnos)
+        elif opcion == "2":
+            agregar_alumno(alumnos, diccionario)
+        elif opcion == "3":
+            guardar_aprobados(alumnos)
+        elif opcion == "4":
+            print("Programa finalizado.")
+            break
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+
+
+menu()  #llamamos a la funcion mas capa la q inicia todo
