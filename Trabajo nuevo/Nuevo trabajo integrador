@@ -28,7 +28,7 @@ empleados = {
 }
 
 # Tupla con las claves secretas del técnico
-clavesTecnico = ("UTN-FRM", "admin", "CCCDDD")
+clavesTecnico = ("UTN", "admin", "CCCDDD")
 
 # Lista vacía para guardar el historial de pedidos
 # cada fila será [código, nombre, cantidad pedida]
@@ -63,6 +63,10 @@ while True:
         else:
             print(f"Bienvenido {empleados[legajo]}!")  # saludo
             while True:
+                # Mostrar lista de golosinas antes de pedir el código
+                print("\n--- LISTA DE GOLOSINAS DISPONIBLES ---")
+                for g in golosinas:
+                    print(f"Código: {g[0]} | {g[1]} | Stock: {g[2]}")
                 try:
                     # Pedimos código de golosina
                     codigo = int(input("Ingrese código de la golosina (o 0 para salir): "))
