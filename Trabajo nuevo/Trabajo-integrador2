@@ -84,4 +84,4 @@ for fila in notasFinales:
     print(f"{fila[0]} - Promedio General: {fila[1]}")
 
 mejor_alumno = max(notasFinales, key=lambda x: x[1])
-print("\n🏆 El alumno con mejor promedio es:", mejor_alumno[0], "con", mejor_alumno[1])
+print("\n El alumno con mejor promedio es:", mejor_alumno[0], "con", mejor_alumno[1])
