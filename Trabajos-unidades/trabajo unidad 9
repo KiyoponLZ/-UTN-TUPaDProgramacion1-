@@ -1,0 +1,303 @@
+
+# TECNICATURA UNIVERSITARIA EN PROGRAMACIÓN - PROGRAMACIÓN I
+# PRÁCTICO 11: APLICACIÓN DE LA RECURSIVIDAD
+
+
+import sys
+# Aumentamos el límite de recursión por si acaso (ejercicio 2 con números altos)
+sys.setrecursionlimit(2000)
+
+## ----------------------------------------------------------------
+## 1) Factorial Recursivo
+## ----------------------------------------------------------------
+
+def calcular_factorial_recursivo(n):
+    """Calcula el factorial de un número n de forma recursiva (n!)."""
+    # Caso Base: El factorial de 0 es 1.
+    if n == 0:
+        return 1
+    # Paso Recursivo: n * (n-1)!
+    else:
+        return n * calcular_factorial_recursivo(n - 1)
+
+def ejercicio_1():
+    print("\n--- 1) Factorial Recursivo ---")
+    try:
+        max_num = int(input("Ingrese un número entero positivo para calcular factoriales hasta él: "))
+        if max_num < 0:
+            print("Por favor, ingrese un número no negativo.")
+            return
+
+        print(f"\nFactoriales desde 1 hasta {max_num}:")
+        for i in range(1, max_num + 1):
+            resultado = calcular_factorial_recursivo(i)
+            print(f"El factorial de {i}! es: {resultado}")
+
+    except ValueError:
+        print("Entrada inválida. Debe ingresar un número entero.")
+
+## ----------------------------------------------------------------
+## 2) Serie de Fibonacci Recursiva
+## ----------------------------------------------------------------
+
+def fibonacci_recursivo(posicion):
+    """Calcula el valor de la serie de Fibonacci en la posición indicada (F_n)."""
+    # Caso Base 1: F0 = 0
+    if posicion == 0:
+        return 0
+    # Caso Base 2: F1 = 1
+    elif posicion == 1:
+        return 1
+    # Paso Recursivo: F_n = F_(n-1) + F_(n-2)
+    else:
+        return fibonacci_recursivo(posicion - 1) + fibonacci_recursivo(posicion - 2)
+
+def ejercicio_2():
+    print("\n--- 2) Serie de Fibonacci Recursiva ---")
+    try:
+        max_pos = int(input("Ingrese la posición máxima hasta donde calcular la serie de Fibonacci: "))
+        if max_pos < 0:
+            print("Por favor, ingrese una posición no negativa.")
+            return
+
+        print(f"\nSerie de Fibonacci hasta la posición {max_pos}:")
+        serie = []
+        for i in range(max_pos + 1):
+            valor = fibonacci_recursivo(i)
+            serie.append(str(valor)) # Convertimos a string para la impresión
+        
+        print(", ".join(serie))
+
+        print(f"El valor de Fibonacci en la posición {max_pos} es: {fibonacci_recursivo(max_pos)}")
+
+    except ValueError:
+        print("Entrada inválida. Debe ingresar un número entero.")
+
+## ----------------------------------------------------------------
+## 3) Potencia Recursiva
+## ----------------------------------------------------------------
+
+def potencia_recursiva(base, exponente):
+    """Calcula la potencia de un número (base^exponente) de forma recursiva."""
+    # Caso Base: Cualquier número elevado a 0 es 1 (n^0 = 1)
+    if exponente == 0:
+        return 1
+    # Caso Base para manejo de exponente negativo (simplificado)
+    elif exponente < 0:
+        print("Error: No se soporta exponente negativo en esta implementación.")
+        return None # O se podría devolver 1 / potencia_recursiva(base, -exponente)
+    # Paso Recursivo: n^m = n * n^(m-1)
+    else:
+        return base * potencia_recursiva(base, exponente - 1)
+
+def ejercicio_3():
+    print("\n--- 3) Potencia Recursiva ---")
+    try:
+        base = int(input("Ingrese el número base (n): "))
+        exponente = int(input("Ingrese el exponente (m, positivo): "))
+        
+        resultado = potencia_recursiva(base, exponente)
+        
+        if resultado is not None:
+             print(f"\nEl resultado de {base} elevado a la {exponente} es: {resultado}")
+
+    except ValueError:
+        print("Entrada inválida. Asegúrese de ingresar números enteros.")
+
+## ----------------------------------------------------------------
+## 4) Decimal a Binario Recursivo
+## ----------------------------------------------------------------
+
+def decimal_a_binario_recursivo(decimal):
+    """Convierte un número decimal a binario recursivamente (cadena de texto)."""
+    # Caso Base: Cuando el cociente llega a 0, la recursión se detiene.
+    if decimal == 0:
+        return ""
+    # Paso Recursivo:
+    else:
+        # 1. Llamar recursivamente con el cociente entero (decimal // 2)
+        # 2. Concatenar el resto (decimal % 2) convertido a cadena.
+        #    La llamada recursiva se ejecutará primero, asegurando el orden "de abajo hacia arriba".
+        resto = decimal % 2
+        cociente = decimal // 2
+        return decimal_a_binario_recursivo(cociente) + str(resto) # 
+
+def ejercicio_4():
+    print("\n--- 4) Decimal a Binario Recursivo ---")
+    try:
+        num_decimal = int(input("Ingrese un número decimal positivo: "))
+        if num_decimal < 0:
+            print("Por favor, ingrese un número entero positivo.")
+            return
+        elif num_decimal == 0:
+            print("El número 0 en binario es: 0")
+            return
+            
+        binario = decimal_a_binario_recursivo(num_decimal)
+        print(f"\nEl número {num_decimal} en binario es: {binario}")
+        
+    except ValueError:
+        print("Entrada inválida. Debe ingresar un número entero.")
+
+## ----------------------------------------------------------------
+## 5) Palíndromo Recursivo
+## ----------------------------------------------------------------
+
+def es_palindromo_recursivo(palabra):
+    """Verifica si una palabra es un palíndromo de forma recursiva."""
+    
+    # Caso Base 1: Si la palabra tiene 0 o 1 carácter, es un palíndromo.
+    if len(palabra) <= 1:
+        return True
+    
+    # Caso Base 2 / Paso Recursivo: Si el primer y último carácter son diferentes, NO es palíndromo.
+    elif palabra[0] != palabra[-1]:
+        return False
+    
+    # Paso Recursivo: Quitar el primer y último carácter y llamar recursivamente
+    else:
+        # palabra[1:-1] devuelve la subcadena sin el primer ni el último carácter.
+        return es_palindromo_recursivo(palabra[1:-1])
+
+def ejercicio_5():
+    print("\n--- 5) Palíndromo Recursivo ---")
+    palabra = input("Ingrese una palabra (sin espacios ni tildes): ").lower().replace(" ", "")
+    
+    if es_palindromo_recursivo(palabra):
+        print(f"'{palabra}' es un palíndromo.")
+    else:
+        print(f"'{palabra}' NO es un palíndromo.")
+
+## ----------------------------------------------------------------
+## 6) Suma de Dígitos Recursiva (sin convertir a string)
+## ----------------------------------------------------------------
+
+def suma_digitos_recursiva(n):
+    """Calcula la suma de los dígitos de un número entero positivo (n) recursivamente."""
+    
+    # Caso Base: Cuando el número tiene un solo dígito o es 0 (n < 10)
+    if n < 10:
+        return n
+    
+    # Paso Recursivo:
+    else:
+        # n % 10: Extrae el último dígito (el resto de la división por 10).
+        # n // 10: Obtiene el resto del número (la parte entera de la división por 10).
+        ultimo_digito = n % 10
+        resto_del_numero = n // 10
+        
+        # Sumamos el último dígito al resultado de la suma de los dígitos restantes.
+        return ultimo_digito + suma_digitos_recursiva(resto_del_numero) # 
+
+def ejercicio_6():
+    print("\n--- 6) Suma de Dígitos Recursiva ---")
+    try:
+        num = int(input("Ingrese un número entero positivo para sumar sus dígitos: "))
+        if num < 0:
+             print("Por favor, ingrese un número entero positivo.")
+             return
+
+        resultado = suma_digitos_recursiva(num)
+        print(f"\nLa suma de los dígitos de {num} es: {resultado}")
+
+    except ValueError:
+        print("Entrada inválida. Debe ingresar un número entero.")
+
+## ----------------------------------------------------------------
+## 7) Conteo de Bloques en Pirámide Recursiva
+## ----------------------------------------------------------------
+
+def contar_bloques_recursiva(n):
+    """Calcula el total de bloques en una pirámide de forma recursiva (Suma de n)."""
+    
+    # Caso Base: Si el nivel es 0 (o la pirámide termina), se necesitan 0 bloques más.
+    if n <= 0:
+        return 0
+    
+    # Paso Recursivo: El nivel actual (n) más el total de bloques de la pirámide anterior (n-1).
+    else:
+        # Esto es equivalente a la suma de los primeros n números.
+        return n + contar_bloques_recursiva(n - 1)
+
+def ejercicio_7():
+    print("\n--- 7) Conteo de Bloques en Pirámide Recursiva ---")
+    try:
+        nivel_base = int(input("Ingrese el número de bloques en el nivel más bajo (n): "))
+        if nivel_base < 1:
+             print("Por favor, ingrese un número entero positivo (al menos 1 bloque).")
+             return
+
+        total = contar_bloques_recursiva(nivel_base)
+        print(f"\nEl total de bloques necesarios para la pirámide de nivel base {nivel_base} es: {total}")
+
+    except ValueError:
+        print("Entrada inválida. Debe ingresar un número entero.")
+
+## ----------------------------------------------------------------
+## 8) Contar Dígito en Número Recursivo
+## ----------------------------------------------------------------
+
+def contar_digito_recursiva(numero, digito):
+    """Cuenta cuántas veces aparece un dígito en un número recursivamente."""
+
+    # Caso Base: Cuando el número se reduce a 0, la recursión termina.
+    if numero == 0:
+        return 0
+    
+    # Paso Recursivo:
+    else:
+        # Extraer el último dígito del número
+        ultimo_digito = numero % 10
+        
+        # Verificar si el último dígito es el que buscamos
+        contador = 0
+        if ultimo_digito == digito:
+            contador = 1
+        
+        # Sumar el contador actual al resultado de la llamada recursiva con el resto del número (numero // 10)
+        resto_del_numero = numero // 10
+        return contador + contar_digito_recursiva(resto_del_numero, digito)
+
+def ejercicio_8():
+    print("\n--- 8) Contar Dígito en Número Recursivo ---")
+    try:
+        num = int(input("Ingrese el número entero positivo (ej: 12233421): "))
+        if num < 0:
+             print("Por favor, ingrese un número entero positivo.")
+             return
+        
+        dig = int(input("Ingrese el dígito a buscar (0-9): "))
+        if dig < 0 or dig > 9:
+             print("Por favor, ingrese un dígito entre 0 y 9.")
+             return
+             
+        # Manejo especial para el caso inicial 0, ya que 0 % 10 == 0
+        if num == 0 and dig == 0:
+             print(f"El dígito {dig} aparece 1 vez en el número 0.")
+             return
+        elif num == 0:
+             print(f"El dígito {dig} aparece 0 veces en el número 0.")
+             return
+        
+        resultado = contar_digito_recursiva(num, dig)
+        print(f"\nEl dígito {dig} aparece {resultado} veces en el número {num}.")
+
+    except ValueError:
+        print("Entrada inválida. Debe ingresar números enteros.")
+
+
+# =================================================================
+# ALGORITMO PRINCIPAL DE PRUEBA
+# =================================================================
+
+if __name__ == "__main__":
+    ejercicio_1()
+    ejercicio_2()
+    ejercicio_3()
+    ejercicio_4()
+    ejercicio_5()
+    ejercicio_6()
+    ejercicio_7()
+    ejercicio_8()
+
+    print("\n\n--- FIN DEL PROGRAMA ---")
